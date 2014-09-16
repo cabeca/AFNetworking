@@ -348,7 +348,8 @@ expectedTotalBytes:(int64_t)expectedTotalBytes {
     NSParameterAssert(task);
     NSParameterAssert(delegate);
 
-    [task addObserver:self forKeyPath:NSStringFromSelector(@selector(state)) options:(NSKeyValueObservingOptions)(NSKeyValueObservingOptionOld |NSKeyValueObservingOptionNew) context:AFTaskStateChangedContext];
+    // Workaround for https://github.com/AFNetworking/AFNetworking/issues/1477
+    // [task addObserver:self forKeyPath:NSStringFromSelector(@selector(state)) options:(NSKeyValueObservingOptions)(NSKeyValueObservingOptionOld |NSKeyValueObservingOptionNew) context:AFTaskStateChangedContext];
     [self.lock lock];
     self.mutableTaskDelegatesKeyedByTaskIdentifier[@(task.taskIdentifier)] = delegate;
     [self.lock unlock];
@@ -420,7 +421,8 @@ expectedTotalBytes:(int64_t)expectedTotalBytes {
 - (void)removeDelegateForTask:(NSURLSessionTask *)task {
     NSParameterAssert(task);
 
-    [task removeObserver:self forKeyPath:NSStringFromSelector(@selector(state)) context:AFTaskStateChangedContext];
+    // Workaround for https://github.com/AFNetworking/AFNetworking/issues/1477
+    //[task removeObserver:self forKeyPath:NSStringFromSelector(@selector(state)) context:AFTaskStateChangedContext];
     [self.lock lock];
     [self.mutableTaskDelegatesKeyedByTaskIdentifier removeObjectForKey:@(task.taskIdentifier)];
     [self.lock unlock];
